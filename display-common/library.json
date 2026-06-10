@@ -1,0 +1,17 @@
+{
+  "name": "display-common",
+  "version": "0.1.0",
+  "description": "Shared design language and infrastructure for ESP32-S2 Reverse TFT display apps: an anti-aliased Helvetica Neue screen toolkit, two-stage wifi onboarding (captive portal + schema-driven setup form), WiGLE geolocation, and debounced buttons. Consumed by display-weather and display-stock.",
+  "keywords": ["esp32", "st7789", "display", "anti-aliased-font", "wifimanager"],
+  "frameworks": "arduino",
+  "platforms": "espressif32",
+  "dependencies": [
+    { "owner": "adafruit", "name": "Adafruit ST7735 and ST7789 Library", "version": "^1.10.4" },
+    { "owner": "adafruit", "name": "Adafruit GFX Library", "version": "^1.11.9" },
+    { "owner": "bblanchon", "name": "ArduinoJson", "version": "^7.0.4" },
+    { "name": "WiFiManager", "version": "https://github.com/tzapu/WiFiManager.git#v2.0.17" }
+  ],
+  "build": {
+    "srcFilter": ["+<*>"]
+  }
+}

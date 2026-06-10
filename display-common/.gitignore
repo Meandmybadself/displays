@@ -1,0 +1,10 @@
+# Proprietary font + generated glyph tables (run scripts/gen_fonts.sh to produce)
+HelveticaNeue.ttc
+src/fonts/HelveticaNeueBold*pt7b.h
+
+# Font tool build + host preview artifacts
+.fonttool/
+sim/build/
+
+# PlatformIO
+.pio/

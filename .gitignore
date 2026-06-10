@@ -1,0 +1,12 @@
+# Top-level ignores for the displays monorepo. Each project also has its own
+# .gitignore (PlatformIO .pio/, generated Helvetica glyph tables, the proprietary
+# HelveticaNeue.ttc, host-preview build artifacts), which still apply per-subdir.
+
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Local backups of the pre-monorepo per-project git histories (kept outside the
+# tree, but ignore here too just in case).
+.subrepo-git-backups/
