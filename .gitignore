@@ -7,6 +7,12 @@
 .idea/
 .vscode/
 
+# Proprietary font — must never be committed at any level of the tree.
+HelveticaNeue.ttc
+**/HelveticaNeue*pt7b.h
+# (Weather Icons tables are SIL OFL and intentionally tracked.)
+!**/WeatherIcons*pt7b.h
+
 # Local backups of the pre-monorepo per-project git histories (kept outside the
 # tree, but ignore here too just in case).
 .subrepo-git-backups/
