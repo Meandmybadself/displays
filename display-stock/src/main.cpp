@@ -1,7 +1,5 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include <WiFiUdp.h>
-#include <NTPClient.h>
 #include <map>
 
 #include "config.h"
@@ -21,18 +19,19 @@ namespace {
     uint32_t last_advance_ms  = 0;
     uint32_t last_refresh_ms  = 0;
     uint32_t last_fetch_step_ms = 0;
-    uint32_t last_status_ms   = 0;
+    uint32_t last_indicator_ms = 0;
     uint32_t dwell_ms         = 0;
 
     bool     refresh_active   = true;   // first cycle runs immediately at boot
     bool     have_data        = false;
+    bool     last_wifi_ok     = false;
 
-    WiFiUDP   ntp_udp;
-    NTPClient ntp(ntp_udp, NTP_SERVER, NTP_OFFSET_SECONDS, NTP_UPDATE_MS);
+    void draw_wifi() { gfx::draw_wifi_indicator(WiFi.status() == WL_CONNECTED); }
 
     void redraw_current() {
         if (have_data) view::draw(stock_fetcher::quote(current_index));
         else           gfx::show_status("Loading prices");
+        draw_wifi();
     }
 
     void advance(bool forward) {
@@ -42,6 +41,7 @@ namespace {
         if (next < 0) return;
         current_index = next;
         view::draw(stock_fetcher::quote(current_index));
+        draw_wifi();
     }
 
     // Stage 2: the schema-driven setup form (symbols + dwell).
@@ -129,8 +129,6 @@ void setup() {
 
     gfx::show_status("Loading prices");
     stock_fetcher::begin(cfg.symbols, cfg.symbol_count);
-    ntp.begin();
-    ntp.update();
 
     redraw_current();
 
@@ -138,7 +136,7 @@ void setup() {
     last_advance_ms = now;
     last_refresh_ms = now;
     last_fetch_step_ms = 0;
-    last_status_ms = 0;
+    last_indicator_ms = now;
 }
 
 void loop() {
@@ -194,19 +192,15 @@ void loop() {
         last_fetch_step_ms = 0;
     }
 
-    // Status bar (clock + wifi dot) once a second.
-    if (now - last_status_ms >= 1000) {
+    // Wifi: nudge reconnect when stalled, and repaint the corner dot on change only.
+    if (now - last_indicator_ms >= 1000) {
         bool wifi_ok = (WiFi.status() == WL_CONNECTED);
         if (!wifi_ok) WiFi.reconnect();   // nudge ESP32 auto-reconnect when it stalls
-        ntp.update();
-        String hhmm;
-        if (wifi_ok && ntp.getEpochTime() > 100000) {
-            char buf[8];
-            snprintf(buf, sizeof(buf), "%02d:%02d", ntp.getHours(), ntp.getMinutes());
-            hhmm = buf;
+        if (wifi_ok != last_wifi_ok) {
+            gfx::draw_wifi_indicator(wifi_ok);
+            last_wifi_ok = wifi_ok;
         }
-        view::draw_status_bar(wifi_ok, hhmm);
-        last_status_ms = now;
+        last_indicator_ms = now;
     }
 
     delay(10);

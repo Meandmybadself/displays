@@ -30,11 +30,6 @@ constexpr const char* YAHOO_HOST       = "query1.finance.yahoo.com";
 constexpr const char* YAHOO_PATH_FMT   = "/v8/finance/chart/%s?interval=1d&range=1d";
 constexpr const char* USER_AGENT       = "Mozilla/5.0 (StockTickerESP32)";
 
-// --- NTP ---
-constexpr const char* NTP_SERVER       = "pool.ntp.org";
-constexpr long NTP_OFFSET_SECONDS      = 0;  // display in UTC; user can edit if they want local
-constexpr unsigned long NTP_UPDATE_MS  = 60UL * 60UL * 1000UL;  // hourly resync
-
 // --- App-specific colours (RGB565), beyond the shared palette in dd_config.h ---
 constexpr uint16_t COLOR_UP            = 0x07E0;   // green
 constexpr uint16_t COLOR_DOWN          = 0xF800;   // red

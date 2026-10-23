@@ -3,8 +3,12 @@
 # sources this file and calls gen_app_fonts() with FCV / BOLD_TTF / OUT / WORK /
 # APP_DIR in the environment.
 gen_app_fonts() {
-    # Bold 15pt, full ASCII — ticker symbol + % change
+    # Headline price, digits '0'(0x30)..'9'(0x39) only. Two sizes: view.cpp uses the
+    # big one and falls back to the small one when a (wide) price would collide with
+    # the right column — so even 4-digit prices fit. A full 52pt like the weather temp
+    # is too wide alongside a column.
+    "$FCV" "$BOLD_TTF" 41 48 57 > "$OUT/HelveticaNeueBold41pt7b.h"
+    "$FCV" "$BOLD_TTF" 29 48 57 > "$OUT/HelveticaNeueBold29pt7b.h"
+    # Right column (symbol + % change), full ASCII.
     "$FCV" "$BOLD_TTF" 15       > "$OUT/HelveticaNeueBold15pt7b.h"
-    # Bold 26pt, '$'(0x24)..'9'(0x39) — big price
-    "$FCV" "$BOLD_TTF" 26 36 57 > "$OUT/HelveticaNeueBold26pt7b.h"
 }

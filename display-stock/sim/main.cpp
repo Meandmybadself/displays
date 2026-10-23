@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
         gfx::show_factory_reset_countdown(3);
     } else {
         view::draw(q);
-        view::draw_status_bar(!flag(argc, argv, "--nowifi"), arg(argc, argv, "--hhmm", "09:41"));
+        gfx::draw_wifi_indicator(!flag(argc, argv, "--nowifi"));
     }
 
     // RGB565 framebuffer -> scaled 8-bit RGB.

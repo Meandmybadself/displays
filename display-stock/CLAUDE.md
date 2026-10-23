@@ -10,7 +10,9 @@ The design language and infrastructure live in a **shared sibling PlatformIO lib
 
 This app was migrated onto the template, so it now uses **anti-aliased Helvetica Neue** (the library's `gfx` blitter, not the old 1-bit GFX fonts) and a **two-stage onboarding**: Stage 1 is the wifi-only captive portal (`wifi_portal`); Stage 2 is a schema-driven web form at `stockticker.local` (`setup_portal`) that collects symbols + dwell — no longer WiFiManager custom params. The library also provides `buttons`, `wifi_portal::check_factory_reset`, the generic boot/status/portal/countdown/wifi-dot screens, `dd_config.h` (pins/geometry/colours/timeouts), the card scripts, and the host-preview shim. See `../display-common/README.md`.
 
-This app keeps only its **app layer** in `src/`: `config.h` (Yahoo host, NTP, bounds, `COLOR_UP/DOWN`; `#include <dd_config.h>`), `storage.*` (`StockConfig` + `parse_symbols`), `stock_fetcher.*` (one-symbol-per-loop, WDT-safe), `view.cpp` (the stock screen + status-bar clock, drawn with `gfx::` primitives + app-only 15/26pt faces), and `main.cpp` (boot state machine + NTP). `scripts/*.sh` are thin wrappers that exec the library scripts; `scripts/app_fonts.sh` declares this app's 15/26pt faces.
+This app keeps only its **app layer** in `src/`: `config.h` (Yahoo host, bounds, `COLOR_UP/DOWN`; `#include <dd_config.h>`), `storage.*` (`StockConfig` + `parse_symbols`), `stock_fetcher.*` (one-symbol-per-loop, WDT-safe), `view.cpp` (the stock screen, drawn with `gfx::` primitives + app-only price faces), and `main.cpp` (boot state machine). `scripts/*.sh` are thin wrappers that exec the library scripts; `scripts/app_fonts.sh` declares this app's price faces.
+
+The stock screen mirrors the weather layout: a big left-justified `$price` (40pt, dropping to 28pt for wide 4-digit prices so it never collides with the column) and the ticker symbol (top) + colour-coded % change (bottom) right-aligned in a small right column drawn in the core `gfx::FONT_MED`. The wifi dot sits in the top-right corner. There is no clock (NTP was removed with it).
 
 ## Commands
 
